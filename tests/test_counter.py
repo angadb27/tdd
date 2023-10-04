@@ -31,37 +31,35 @@ class CounterTest(TestCase):
 
     def test_create_a_counter(self):
         """It should create a counter"""
-        result = self.client.post('/counters/bar')
+        result = self.client.post('/counters/bar_create')
         self.assertEqual(result.status_code, status.HTTP_201_CREATED)
 
     def test_duplicate_a_counter(self):
         """It should return an error for duplicates"""
-        result = self.client.post('/counters/bar')
+        result = self.client.post('/counters/bar_duplicate')
         self.assertEqual(result.status_code, status.HTTP_201_CREATED)
-        result = self.client.post('/counters/bar')
+        result = self.client.post('/counters/bar_duplicate')
         self.assertEqual(result.status_code, status.HTTP_409_CONFLICT)
         
     def test_update_a_counter(self):
         """It should update a counter"""
-        result = self.client.post('/counters/bar')
+        result = self.client.post('/counters/bar_update')
         self.assertEqual(result.status_code, status.HTTP_201_CREATED)
 
-        base_result = self.client.get('/counters/bar')
-        base_value = json.loads(base_result.data)["bar"]
+        base_result = self.client.get('/counters/bar_update')
+        base_value = json.loads(base_result.data)["bar_update"]
 
-        update_result = self.client.put('/counters/bar')
+        update_result = self.client.put('/counters/bar_update')
         self.assertEqual(update_result.status_code, status.HTTP_200_OK)
 
-        new_result = self.client.get('/counters/bar')
-        new_value = json.loads(new_result.data)["bar"]
+        new_result = self.client.get('/counters/bar_update')
+        new_value = json.loads(new_result.data)["bar_update"]
         self.assertEqual(new_value, base_value + 1)
 
     def test_read_a_counter(self):
-        self.client.post('/counters/bar')
+        self.client.post('/counters/bar_read')
         # Read the counter
-        result = self.client.get('/counters/bar')
+        result = self.client.get('/counters/bar_read')
         self.assertEqual(result.status_code, status.HTTP_200_OK)
-        value = json.loads(result.data)["bar"]
+        value = json.loads(result.data)["bar_read"]
         self.assertEqual(value, 0) 
-
-    

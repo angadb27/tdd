@@ -56,7 +56,7 @@ class CounterTest(TestCase):
         new_value = json.loads(new_result.data)["bar_update"]
         self.assertEqual(new_value, base_value + 1)
 
-        no_result = self.client.delete('/counters/no_result_update')
+        no_result = self.client.put('/counters/no_result_update')
         self.assertEqual(no_result.status_code, status.HTTP_404_NOT_FOUND)
         response_data = json.loads(no_result.data)
         self.assertEqual(response_data["error"], "Counter not found")

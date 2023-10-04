@@ -63,7 +63,7 @@ class CounterTest(TestCase):
 
     def test_read_a_counter(self):
         self.client.post('/counters/bar_read')
-        # Read the counter
+        """It should read a counter"""
         result = self.client.get('/counters/bar_read')
         self.assertEqual(result.status_code, status.HTTP_200_OK)
         value = json.loads(result.data)["bar_read"]
@@ -72,4 +72,17 @@ class CounterTest(TestCase):
         no_result = self.client.get('/counters/no_result_read')
         self.assertEqual(no_result.status_code, status.HTTP_404_NOT_FOUND)
         response_data = json.loads(no_result.data)
+        self.assertEqual(response_data["error"], "Counter not found")
+    
+    def test_delete_a_counter(self):
+        """It should delete a counter"""
+        self.client.post('/counters/bar_delete')
+        
+        delete_result = self.client.delete('/counters/bar_delete')
+        self.assertEqual(delete_result.status_code, status.HTTP_204_NO_CONTENT)
+        
+        # Test for deletting a counter that does not exist
+        no_delete = self.client.delete('/counters/no_result_delete')
+        self.assertEqual(no_delete.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = json.loads(no_delete.data)
         self.assertEqual(response_data["error"], "Counter not found")

@@ -10,6 +10,7 @@ how to call the web service and assert what it should return.
 - The service must be able to update a counter by name.
 - The service must be able to read the counter
 """
+import json
 from unittest import TestCase
 
 # we need to import the unit under test - counter
@@ -31,27 +32,27 @@ class CounterTest(TestCase):
         result = self.client.post('/counters/bar')
         self.assertEqual(result.status_code, status.HTTP_409_CONFLICT)
         
-        def test_update_a_counter(self):
-            """It should update a counter"""
-            result = self.client.post('/counters/bar')
-            self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+    def test_update_a_counter(self):
+        """It should update a counter"""
+        result = self.client.post('/counters/bar')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
 
-            base_result = self.client.get('/counters/bar')
-            base_value = json.loads(base_result.data)["bar"]
+        base_result = self.client.get('/counters/bar')
+        base_value = json.loads(base_result.data)["bar"]
 
-            update_result = self.client.put('/counters/bar')
-            self.assertEqual(update_result.status_code, status.HTTP_200_OK)
+        update_result = self.client.put('/counters/bar')
+        self.assertEqual(update_result.status_code, status.HTTP_200_OK)
 
-            new_result = self.client.get('/counters/bar')
-            new_value = json.loads(new_result.data)["bar"]
-            self.assertEqual(new_value, base_value + 1)
+        new_result = self.client.get('/counters/bar')
+        new_value = json.loads(new_result.data)["bar"]
+        self.assertEqual(new_value, base_value + 1)
 
-        def test_read_a_counter(self):
-            self.client.post('/counters/bar')
-            # Read the counter
-            result = self.client.get('/counters/bar')
-            self.assertEqual(result.status_code, status.HTTP_200_OK)
-            value = json.loads(result.data)["bar"]
-            self.assertEqual(value, 1) 
+    def test_read_a_counter(self):
+        self.client.post('/counters/bar')
+        # Read the counter
+        result = self.client.get('/counters/bar')
+        self.assertEqual(result.status_code, status.HTTP_200_OK)
+        value = json.loads(result.data)["bar"]
+        self.assertEqual(value, 1) 
 
     

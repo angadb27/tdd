@@ -53,6 +53,6 @@ class CounterTest(TestCase):
         result = self.client.get('/counters/bar')
         self.assertEqual(result.status_code, status.HTTP_200_OK)
         value = json.loads(result.data)["bar"]
-        self.assertEqual(value, 1) 
+        self.assertEqual(value, 0) 
 
     

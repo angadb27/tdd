@@ -24,6 +24,10 @@ class CounterTest(TestCase):
 
     def setUp(self):
         self.client = app.test_client()
+        # Resetting the counters before each test
+        with app.app_context():
+            global COUNTERS
+            COUNTERS = {}
 
     def test_create_a_counter(self):
         """It should create a counter"""

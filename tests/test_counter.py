@@ -25,6 +25,11 @@ class CounterTest(TestCase):
     def setUp(self):
         self.client = app.test_client()
 
+    def test_create_a_counter(self):
+        """It should create a counter"""
+        result = self.client.post('/counters/bar')
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+
     def test_duplicate_a_counter(self):
         """It should return an error for duplicates"""
         result = self.client.post('/counters/bar')

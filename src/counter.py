@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 from src import status
 
 app = Flask(__name__)
@@ -23,8 +23,10 @@ def create_counter(name):
 
 @app.route('/counters/<name>', methods=['PUT'])
 def update_counter(name):
+    """Update a counter"""
+    global COUNTERS
     if name not in COUNTERS:
-        return jsonify({"error": "Counter not found"}), status.HTTP_404_NOT_FOUND
+        return {"error": "Counter not found"}, status.HTTP_404_NOT_FOUND
 
     COUNTERS[name] += 1
-    return jsonify({name: COUNTERS[name]}), status.HTTP_200_OK
+    return {name: COUNTERS[name]}, status.HTTP_200_OK

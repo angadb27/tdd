@@ -30,3 +30,11 @@ def update_counter(name):
 
     COUNTERS[name] += 1
     return {name: COUNTERS[name]}, status.HTTP_200_OK
+
+@app.route('/counters/<name>', methods=['GET'])
+def read_counter(name):
+    """Read a counter value"""
+    global COUNTERS
+    if name not in COUNTERS:
+        return {"error": "Counter not found"}, status.HTTP_404_NOT_FOUND
+    return {name: COUNTERS[name]}, status.HTTP_200_OK

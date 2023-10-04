@@ -56,6 +56,11 @@ class CounterTest(TestCase):
         new_value = json.loads(new_result.data)["bar_update"]
         self.assertEqual(new_value, base_value + 1)
 
+        no_result = self.client.delete('/counters/no_result_update')
+        self.assertEqual(no_result.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = json.loads(no_result.data)
+        self.assertEqual(response_data["error"], "Counter not found")
+
     def test_read_a_counter(self):
         self.client.post('/counters/bar_read')
         # Read the counter
@@ -63,3 +68,8 @@ class CounterTest(TestCase):
         self.assertEqual(result.status_code, status.HTTP_200_OK)
         value = json.loads(result.data)["bar_read"]
         self.assertEqual(value, 0) 
+
+        no_result = self.client.get('/counters/no_result_read')
+        self.assertEqual(no_result.status_code, status.HTTP_404_NOT_FOUND)
+        response_data = json.loads(no_result.data)
+        self.assertEqual(response_data["error"], "Counter not found")
